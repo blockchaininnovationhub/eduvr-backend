@@ -19,12 +19,12 @@ const start = async () => {
   const PORT = process.env.PORT || 9000;
 
   const peerServer = ExpressPeerServer(app, {
-    path: "/peerjs",
+    path: "/call",
     debug: true,
     proxied: true,
   });
 
-  app.use("/peer", peerServer);
+  app.use("/peerjs", peerServer);
 
   app.use(express.json());
   app.use(cors());
