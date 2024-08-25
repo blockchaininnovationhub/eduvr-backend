@@ -1,0 +1,29 @@
+POST http://localhost:9000/auth/signup HTTP/1.1
+content-type: application/json
+
+{
+    "email": "testss23w@example.com"
+}
+
+
+POST http://localhost:9000/auth/signup/verify HTTP/1.1
+content-type: application/json
+
+{
+    "email": "testss23w@example.com",
+    "firstName": "Tes/t",
+    "lastName": "Test",
+    "walletAddress": "0x4f8e42bcd06ab1c4e0b6d13e024f7cc7f78760c6",
+    "otp": "123456",
+    "signature": "6a9d3d2172c9b6e3c7462df044b3b4a9b2bd3c047ff7e6c6d8a24ecf6de23d63",
+    "timestamp": "1211111345622999"
+}
+
+POST http://localhost:9000/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "walletAddress": "0x4f8e42bcd06ab1c4e0b6d13e024f7cc7f78760c6",
+    "timestamp": "1211111345622999",
+    "signature": "6a9d3d2172c9b6e3c7462df044b3b4a9b2bd3c047ff7e6c6d8a24ecf6de23d63"
+}

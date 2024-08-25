@@ -1,0 +1,25 @@
+{
+  "name": "schoolverse",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=dev nodemon src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ethers": "^6.13.2",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.3",
+    "nodemon": "^3.1.4",
+    "otplib": "^12.0.1",
+    "peer": "^1.0.2",
+    "uuid": "^10.0.0",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
