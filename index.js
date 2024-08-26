@@ -10,7 +10,6 @@ import CallController from "./controllers/CreateCallController.js";
 import RefreshAccessTokenController from "./controllers/RefreshAccessTokenController.js";
 import AuthMiddleware from "./middlewares/AuthMiddleware.js";
 import cors from "cors";
-import { ExpressPeerServer } from "peer";
 
 const start = async () => {
   await db();
@@ -18,12 +17,6 @@ const start = async () => {
   const app = express();
   const PORT = process.env.PORT || 9000;
 
-  const peerServer = ExpressPeerServer(app, {
-    debug: true,
-    proxied: true,
-  });
-
-  app.use("", peerServer);
 
   app.use(express.json());
   app.use(cors());
