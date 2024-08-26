@@ -59,7 +59,6 @@ export const generateRandomString = (length = 128) => {
   for (let i = 0; i < length; i++) {
     let randomIndex = crypto.randomBytes(1)[0] % charsetLength;
 
-    // Ensure the first and last characters are not hyphens
     if (i === 0 || i === length - 1) {
       while (charset[randomIndex] === "-") {
         randomIndex = crypto.randomBytes(1)[0] % charsetLength;
