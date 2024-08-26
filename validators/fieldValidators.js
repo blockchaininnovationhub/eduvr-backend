@@ -2,14 +2,7 @@ import validator from "validator";
 import { isAddress } from "ethers";
 import ValidationError from "./exceptions.js";
 
-const { isEmail, isAlpha, isNumeric } = validator;
-
-export const validateEmail = (email) => {
-  if (!email) throw new ValidationError("Email is empty");
-  if (email.length > 255) throw new ValidationError("Email is too long");
-  if (!isEmail(email)) throw new ValidationError("Invalid email");
-  return true;
-};
+const { isAlpha, isNumeric } = validator;
 
 export const validateWalletAddress = (address) => {
   if (!address) throw new ValidationError("Wallet address is empty");
@@ -19,20 +12,8 @@ export const validateWalletAddress = (address) => {
 
 export const validateName = (name) => {
   if (!name) throw new ValidationError("Name is empty");
-  if (name.length > 63) throw new ValidationError("Name is too long");
+  if (name.length > 15) throw new ValidationError("Name is too long");
   if (!isAlpha(name)) throw new ValidationError("Invalid name");
-  return true;
-};
-
-export const validateOTP = (otp) => {
-  if (!otp) throw new ValidationError("OTP is empty");
-  if (typeof otp !== "string")
-    throw new ValidationError("OTP must be a string");
-
-  const otpPattern = /^[0-9]{6}$/;
-  if (!otpPattern.test(otp)) {
-    throw new ValidationError("OTP must be a 6-digit number");
-  }
   return true;
 };
 
