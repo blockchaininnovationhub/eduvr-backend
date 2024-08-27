@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 
 export const sha256 = (message) => {
   return crypto.createHash("sha256").update(message).digest("hex");
