@@ -5,7 +5,7 @@ export default (req, res, next) => {
 
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.SECRET_KEY_REFRESH_TOKEN, (err, user) => {
+  jwt.verify(token, process.env.SECRET_KEY_ACCESS_TOKEN, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;
     next();
