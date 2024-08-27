@@ -5,6 +5,7 @@ import {
 } from "../validators/fieldValidators.js";
 import UserModel from "../models/userModel.js";
 import ValidationError from "../validators/exceptions.js";
+import { verifySignature } from "./../validators/signature.js";
 
 export default async (req, res) => {
   const { walletAddress, signature, timestamp } = req.body;
@@ -13,19 +14,18 @@ export default async (req, res) => {
     validateWalletAddress(walletAddress);
     validateTimestampExpiry(timestamp);
 
-    const userData = sortObjectProperties(
-      lowercaseObjectProperties({ walletAddress })
-    );
-    const userHash = objectHasher(userData);
-
-    validateSignature(signature, `${userHash}:${timestamp}`);
-
     const lowerWalletAddress = walletAddress.toLowerCase();
+
+    verifySignature(
+      signature,
+      `${lowerWalletAddress}:${timestamp}`,
+      lowerWalletAddress
+    );
 
     const user = await UserModel.findOne({ walletAddress: lowerWalletAddress });
 
     if (!user) {
-      return res.status(404).json({ message: "Invalid wallet address" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const refreshToken = generateRefreshAccessToken(user);
@@ -41,7 +41,7 @@ export default async (req, res) => {
     if (error instanceof ValidationError) {
       return res.status(400).json({ message: error.message });
     }
-    console.error("Error during login:", error);
-    return res.status(500).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ error: "Unexpected error" });
   }
 };

@@ -1,10 +1,4 @@
 import {
-  sortObjectProperties,
-  lowercaseObjectProperties,
-  objectHasher,
-} from "../utils.js";
-import {
-  validateName,
   validateTimestampExpiry,
   validateWalletAddress,
 } from "../validators/fieldValidators.js";
@@ -13,37 +7,29 @@ import ValidationError from "../validators/exceptions.js";
 import { verifySignature } from "../validators/signature.js";
 
 export default async (req, res) => {
-  const { username, walletAddress, signature, timestamp } = req.body;
+  const { walletAddress, signature, timestamp } = req.body;
 
   try {
-    validateName(username);
     validateWalletAddress(walletAddress);
     validateTimestampExpiry(timestamp);
 
-    const _user = sortObjectProperties(
-      lowercaseObjectProperties({
-        username,
-        walletAddress,
-      })
+    const lowerWalletAddress = walletAddress.toLowerCase();
+
+    verifySignature(
+      signature,
+      `${lowerWalletAddress}:${timestamp}`,
+      lowerWalletAddress
     );
 
-    const _userHash = objectHasher(_user);
-
-    verifySignature(signature, `${_userHash}:${timestamp}`);
-
-    let getUserByEmail = await UserModel.findOne({ email });
-
-    if (getUserByEmail) {
-      return res.status(409).json({ message: "Email already exists" });
-    }
-
-    let getUserByWalletAddress = await UserModel.findOne({ email });
+    let getUserByWalletAddress = await UserModel.findOne({
+      walletAddress: lowerWalletAddress,
+    });
 
     if (getUserByWalletAddress) {
       return res.status(409).json({ message: "Wallet Address already exists" });
     }
 
-    let user = await UserModel({ walletAddress, username });
+    let user = await UserModel({ walletAddress: lowerWalletAddress });
     await user.save();
 
     return res.status(200).json({ message: "User successfully created" });

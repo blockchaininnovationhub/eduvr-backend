@@ -1,7 +1,7 @@
 import { verifyMessage } from "ethers";
 import ValidationError from "./exceptions.js";
 
-export const verifySignature = (signature, message) => {
+export const verifySignature = (signature, message, expectedAddress) => {
   try {
     const recoveredAddress = verifyMessage(message, signature);
     if (recoveredAddress.toLowerCase() !== expectedAddress.toLowerCase()) {
