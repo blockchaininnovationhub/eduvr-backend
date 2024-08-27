@@ -11,7 +11,10 @@ export default (req, res) => {
     (err, user) => {
       if (err) return res.sendStatus(403);
 
-      const accessToken = generateAccessToken(user);
+      const accessToken = generateAccessToken({
+        _id: user._id,
+        walletAddress: user.walletAddress.toLowerCase(),
+      });
       res.json({ accessToken });
     }
   );

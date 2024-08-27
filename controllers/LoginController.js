@@ -28,9 +28,15 @@ export default async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const refreshToken = generateRefreshAccessToken(user);
+    const refreshToken = generateRefreshAccessToken({
+      _id: user._id,
+      walletAddress: lowerWalletAddress,
+    });
 
-    const accessToken = generateAccessToken(user);
+    const accessToken = generateAccessToken({
+      _id: user._id,
+      walletAddress: lowerWalletAddress,
+    });
 
     return res.status(200).json({
       message: "Login successful",
