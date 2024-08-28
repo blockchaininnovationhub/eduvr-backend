@@ -39,9 +39,54 @@ export const MyCallController = async (req, res) => {
 };
 
 export const CallStatController = async (req, res) => {
-  const user = req.user._id;
+  try {
+    const userId = req.user._id;
 
-  const calls = await CallModel.countDocuments({ user });
+    const stats = await CallModel.aggregate([
+      {
+        $match: { user: userId },
+      },
+      {
+        $facet: {
+          totalCalls: [{ $count: "count" }],
+          activeCalls: [{ $match: { status: true } }, { $count: "count" }],
+        },
+      },
+    ]);
 
-  return res.status(200).json({ totalCall: calls });
+    const totalCalls = stats[0].totalCalls.length
+      ? stats[0].totalCalls[0].count
+      : 0;
+    const activeCalls = stats[0].activeCalls.length
+      ? stats[0].activeCalls[0].count
+      : 0;
+
+    return res.status(200).json({ totalCalls, activeCalls });
+  } catch (error) {
+    console.error("Error in CallStatController:", error);
+    return res.status(500).json({ message: "Unexpected error occurred" });
+  }
+};
+
+export const DeactivateCallController = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { callId } = req.params;
+
+    const call = await CallModel.findOne({ _id: callId, user: userId });
+
+    if (!call) {
+      return res
+        .status(404)
+        .json({ message: "Call not found or you are not the owner" });
+    }
+
+    call.status = false;
+    await call.save();
+
+    return res.status(200).json({ message: "Call deactivated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Unexpected error occurred" });
+  }
 };

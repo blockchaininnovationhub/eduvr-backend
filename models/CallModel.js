@@ -6,6 +6,7 @@ const CallSchema = new mongoose.Schema({
   session: { type: String, required: false },
   user: { type: String, ref: "User", required: true },
   maxParticipants: { type: Number, required: true, default: 32 },
+  status: { type: Boolean, required: true, default: true },
   createdAt: { type: Date, default: Date.now },
 });
 
