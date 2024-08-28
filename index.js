@@ -38,7 +38,7 @@ const start = async () => {
   app.post("/call", AuthMiddleware, CreateCallController);
   app.post("/call/participant", CreateCallParticipant);
   app.get("/call/participant/:callId", GetCallParticipants);
-  app.get("/call/positions/:callId", AuthMiddleware, GetAvailablePositions);
+  app.get("/call/positions/:callId", GetAvailablePositions);
   app.post(
     "/call/deactivate/:callId",
     AuthMiddleware,
