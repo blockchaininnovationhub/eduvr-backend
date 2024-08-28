@@ -1,7 +1,7 @@
-import CallParticipant from "../models/CallParticipant";
-import Call from "../models/Call";
+import CallParticipant from "../models/CallParticipant.js";
+import Call from "../models/CallModel.js";
 
-const getAvailablePositions = async (req, res) => {
+const GetAvailablePositions = async (req, res) => {
   try {
     const { callId } = req.params;
 
@@ -31,4 +31,4 @@ const getAvailablePositions = async (req, res) => {
   }
 };
 
-export default { getAvailablePositions };
+export default GetAvailablePositions;

@@ -1,15 +1,15 @@
-import CallParticipant from "../models/CallParticipant";
-import Call from "../models/Call"; // Assuming there's a Call model
+import CallParticipant from "../models/CallParticipant.js";
+import Call from "../models/CallModel.js";
 
 const CreateCallParticipant = async (req, res) => {
   try {
     const { avatar, position, callId } = req.body;
 
-    if (!avatar || typeof avatar !== "number" || avatar !== 1 || avatar !== 0) {
+    if (!avatar || typeof avatar !== "number") {
       return res.status(400).json({ message: "Invalid or missing avatar" });
     }
 
-    if (!position || typeof avatar !== "position" || position < 1) {
+    if (!position || typeof position !== "number" || position < 1) {
       return res.status(400).json({
         message: "Invalid or missing position. Must be a positive number.",
       });
@@ -26,7 +26,7 @@ const CreateCallParticipant = async (req, res) => {
     }
 
     const existingParticipant = await CallParticipant.findOne({
-      call: callId,
+      call,
       position,
     });
 

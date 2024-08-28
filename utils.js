@@ -46,7 +46,7 @@ export const generateRandomString = (length = 128) => {
   return randomString;
 };
 
-export const generateCallURL = () => {
+export const generateCallID = () => {
   const randomString = generateRandomString(10);
   const parts = [
     randomString.slice(0, 3),

@@ -12,6 +12,9 @@ import {
 import RefreshAccessTokenController from "./controllers/RefreshAccessTokenController.js";
 import AuthMiddleware from "./middlewares/AuthMiddleware.js";
 import cors from "cors";
+import CreateCallParticipant from "./controllers/CallParticipantController.js";
+import GetAvailablePositions from "./controllers/AvailablePositionController.js";
+import ProfileController from "./controllers/ProfileController.js";
 
 const start = async () => {
   await db();
@@ -25,11 +28,14 @@ const start = async () => {
   app.post("/auth/login", LoginController);
   app.post("/auth/signup", SignupController);
   app.post("/auth/token/refresh", RefreshAccessTokenController);
+  app.get("/auth/profile", AuthMiddleware, ProfileController);
 
   app.get("/call/:id", GetCallController);
   app.get("/call", AuthMiddleware, MyCallController);
   app.post("/call", AuthMiddleware, CreateCallController);
-  app.post("/call/stat", AuthMiddleware, CallStatController);
+  app.get("/call/stat", AuthMiddleware, CallStatController);
+  app.post("/call/join", CreateCallParticipant);
+  app.get("/call/positions/:callId", AuthMiddleware, GetAvailablePositions);
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
