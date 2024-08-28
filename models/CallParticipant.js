@@ -9,4 +9,6 @@ const CallParticipantSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("CallParticipant", CallParticipantSchema);
+const CallParticipantModel = mongoose.model("CallParticipant", CallParticipantSchema)
+
+export default CallParticipantModel;

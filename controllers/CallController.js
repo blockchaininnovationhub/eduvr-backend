@@ -1,4 +1,5 @@
 import CallModel from "../models/CallModel.js";
+import CallParticipantModel from "../models/CallParticipant.js";
 import { generateRandomString } from "../utils.js";
 
 export const CreateCallController = async (req, res) => {
@@ -88,5 +89,21 @@ export const DeactivateCallController = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Unexpected error occurred" });
+  }
+};
+
+export const GetCallParticipants = async (req, res) => {
+  const { callId } = req.params;
+
+  try {
+    // Fetch participants for the given call ID
+    const participants = await CallParticipantModel.find({
+      call: callId,
+    });
+
+    res.status(200).json(participants);
+  } catch (error) {
+    console.error("Error fetching call participants:", error);
+    res.status(500).json({ message: "Unexpected error occurred" });
   }
 };

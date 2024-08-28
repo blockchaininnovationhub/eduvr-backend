@@ -9,6 +9,7 @@ import {
   CallStatController,
   CreateCallController,
   DeactivateCallController,
+  GetCallParticipants,
 } from "./controllers/CallController.js";
 import RefreshAccessTokenController from "./controllers/RefreshAccessTokenController.js";
 import AuthMiddleware from "./middlewares/AuthMiddleware.js";
@@ -35,9 +36,14 @@ const start = async () => {
   app.get("/call/:id", GetCallController);
   app.get("/call", AuthMiddleware, MyCallController);
   app.post("/call", AuthMiddleware, CreateCallController);
-  app.post("/call/join", CreateCallParticipant);
+  app.post("/call/participant", CreateCallParticipant);
+  app.get("/call/participant/:callId", GetCallParticipants);
   app.get("/call/positions/:callId", AuthMiddleware, GetAvailablePositions);
-  app.post("/call/deactivate/:callId", AuthMiddleware, DeactivateCallController);
+  app.post(
+    "/call/deactivate/:callId",
+    AuthMiddleware,
+    DeactivateCallController
+  );
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
