@@ -19,10 +19,10 @@ export const CreateCallController = async (req, res) => {
   }
 };
 
-export const GetCallController = (req, res) => {
+export const GetCallController = async (req, res) => {
   const { id } = req.params;
 
-  const call = CallModel.findOne({ _id: id });
+  const call = await CallModel.findOne({ _id: id });
 
   if (!call) {
     return res.status(404).json({ message: "There is no such call" });
