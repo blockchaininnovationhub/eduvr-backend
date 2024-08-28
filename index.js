@@ -30,10 +30,10 @@ const start = async () => {
   app.post("/auth/token/refresh", RefreshAccessTokenController);
   app.get("/auth/profile", AuthMiddleware, ProfileController);
 
+  app.get("/call/stats", AuthMiddleware, CallStatController);
   app.get("/call/:id", GetCallController);
   app.get("/call", AuthMiddleware, MyCallController);
   app.post("/call", AuthMiddleware, CreateCallController);
-  app.get("/call/stat", AuthMiddleware, CallStatController);
   app.post("/call/join", CreateCallParticipant);
   app.get("/call/positions/:callId", AuthMiddleware, GetAvailablePositions);
 

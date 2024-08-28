@@ -41,7 +41,7 @@ export const MyCallController = async (req, res) => {
 export const CallStatController = async (req, res) => {
   const user = req.user._id;
 
-  const call = await CallModel.countDocuments({ user });
+  const calls = await CallModel.countDocuments({ user });
 
-  return res.status(200).json({ totalCall: call });
+  return res.status(200).json({ totalCall: calls });
 };
