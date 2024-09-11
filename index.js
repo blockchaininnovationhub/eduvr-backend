@@ -17,6 +17,7 @@ import cors from "cors";
 import CreateCallParticipant from "./controllers/CallParticipantController.js";
 import GetAvailablePositions from "./controllers/AvailablePositionController.js";
 import ProfileController from "./controllers/ProfileController.js";
+import { Server } from "socket.io";
 
 const start = async () => {
   await db();
@@ -45,7 +46,20 @@ const start = async () => {
     DeactivateCallController
   );
 
-  app.listen(PORT, () => {
+  const server = require("http").createServer(app);
+
+  const io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
+
+  io.on("connection", (socket) => {
+    socket.emit("connect", { message: "a new client connected" });
+  });
+
+  server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(process.env.NODE_ENV);
   });
