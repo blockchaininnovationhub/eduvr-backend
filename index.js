@@ -18,6 +18,7 @@ import CreateCallParticipant from "./controllers/CallParticipantController.js";
 import GetAvailablePositions from "./controllers/AvailablePositionController.js";
 import ProfileController from "./controllers/ProfileController.js";
 import { Server } from "socket.io";
+import { createServer } from "http";
 
 const start = async () => {
   await db();
@@ -46,7 +47,7 @@ const start = async () => {
     DeactivateCallController
   );
 
-  const server = require("http").createServer(app);
+  const server = createServer(app);
 
   const io = new Server(server, {
     cors: {
