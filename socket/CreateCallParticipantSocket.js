@@ -1,7 +1,7 @@
 import CallParticipant from "../models/CallParticipant.js";
 import Call from "../models/CallModel.js";
 
-const CreateCallParticipant = async (data) => {
+const CreateCallParticipant = async (data, socket) => {
   try {
     const { avatar, position, callId } = data;
 
@@ -44,6 +44,7 @@ const CreateCallParticipant = async (data) => {
       avatar,
       position,
       call: callId,
+      socketSesssion: socket.id
     });
 
     await newParticipant.save();

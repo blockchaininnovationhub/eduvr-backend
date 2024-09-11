@@ -20,6 +20,7 @@ import ProfileController from "./controllers/ProfileController.js";
 import CreateCallParticipantSocket from "./socket/CreateCallParticipantSocket.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import CallParticipantModel from "./models/CallParticipant.js";
 
 const start = async () => {
   await db();
@@ -60,11 +61,23 @@ const start = async () => {
     socket.emit("connect", { message: "a new client connected" });
 
     socket.on("joinCall", (data) => {
-      const result = CreateCallParticipantSocket(data);
+      const result = CreateCallParticipantSocket(data, socket);
 
       io.emit("participantJoined", {
         result,
         message: "A new participant has joined the call",
+      });
+    });
+
+    socket.on("disconnect", async () => {
+      const socketSesssion = socket.id;
+      const callParticipant = await CallParticipantModel.findOne({
+        socketSesssion,
+      });
+
+      io.emit("participantLeft", {
+        callParticipant,
+        message: "A participant has left the call",
       });
     });
   });
