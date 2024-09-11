@@ -17,6 +17,7 @@ import cors from "cors";
 import CreateCallParticipant from "./controllers/CallParticipantController.js";
 import GetAvailablePositions from "./controllers/AvailablePositionController.js";
 import ProfileController from "./controllers/ProfileController.js";
+import CreateCallParticipantSocket from "./socket/CreateCallParticipantSocket.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
@@ -25,6 +26,12 @@ const start = async () => {
 
   const app = express();
   const PORT = process.env.PORT || 9000;
+
+  const server = createServer(app);
+
+  const io = new Server(server, {
+    transports: ["websocket"],
+  });
 
   app.use(express.json());
   app.use(cors());
@@ -38,7 +45,9 @@ const start = async () => {
   app.get("/call/:id", GetCallController);
   app.get("/call", AuthMiddleware, MyCallController);
   app.post("/call", AuthMiddleware, CreateCallController);
-  app.post("/call/participant", CreateCallParticipant);
+  app.post("/call/participant", (req, res) =>
+    CreateCallParticipant(req, res, io)
+  );
   app.get("/call/participant/:callId", GetCallParticipants);
   app.get("/call/positions/:callId", GetAvailablePositions);
   app.post(
@@ -47,14 +56,17 @@ const start = async () => {
     DeactivateCallController
   );
 
-  const server = createServer(app);
-
-  const io = new Server(server, {
-    transports: ["websocket"],
-  });
-
   io.on("connection", (socket) => {
     socket.emit("connect", { message: "a new client connected" });
+
+    socket.on("joinCall", (data) => {
+      const result = CreateCallParticipantSocket(data);
+
+      io.emit("participantJoined", {
+        result,
+        message: "A new participant has joined the call",
+      });
+    });
   });
 
   server.listen(PORT, () => {
