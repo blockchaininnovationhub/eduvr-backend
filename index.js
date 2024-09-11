@@ -36,6 +36,9 @@ const start = async () => {
 
   app.use(express.json());
   app.use(cors());
+  app.get("/", (req, res) => {
+    return res.status(200).json({ message: "i am alive!" });
+  });
 
   app.post("/auth/login", LoginController);
   app.post("/auth/signup", SignupController);
